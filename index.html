@@ -3,9 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <title>Mon IA Business</title>
+  <style>
+    body { font-family: sans-serif; padding: 2em; background: #f4f4f4; }
+    input, select, button { margin: 0.5em 0; padding: 0.5em; width: 100%; }
+    #resultat { margin-top: 2em; background: white; padding: 1em; border-radius: 8px; }
+  </style>
 </head>
 <body>
-  <h1>Bienvenue sur Mon IA Business 🚀</h1>
-  <p>Ce site est en cours de création. Revenez bientôt !</p>
+  <h1>💡 Générateur d'idées business IA</h1>
+
+  <label>Votre idée de départ :</label>
+  <input type="text" id="idee" placeholder="Ex: IA pour les restaurants">
+
+  <label>Secteur :</label>
+  <select id="secteur">
+    <option>Technologie</option>
+    <option>Santé</option>
+    <option>Éducation</option>
+    <option>Finance</option>
+  </select>
+
+  <label>Budget :</label>
+  <select id="budget">
+    <option>Petit</option>
+    <option>Moyen</option>
+    <option>Grand</option>
+  </select>
+
+  <label>Niveau d’innovation :</label>
+  <select id="innovation">
+    <option>Classique</option>
+    <option>Innovant</option>
+    <option>Disruptif</option>
+  </select>
+
+  <button onclick="genererIdee()">Générer avec l’IA 🚀</button>
+
+  <div id="resultat"></div>
+
+  <script>
+    async function genererIdee() {
+      const idee = document.getElementById('idee').value;
+      const secteur = document.getElementById('secteur').value;
+      const budget = document.getElementById('budget').value;
+      const innovation = document.getElementById('innovation').value;
+
+      const prompt = `Génère une idée business IA dans le secteur ${secteur}, avec un budget ${budget}, niveau d’innovation ${innovation}, à partir de : ${idee}`;
+
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer TON_CLE_API"
+        },
+        body: JSON.stringify({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: prompt }]
+        })
+      });
+
+      const data = await response.json();
+      document.getElementById('resultat').innerText = data.choices[0].message.content;
+    }
+  </script>
 </body>
 </html>
